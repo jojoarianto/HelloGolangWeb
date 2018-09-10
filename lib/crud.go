@@ -1,4 +1,4 @@
-package main
+package lib
 
 import (
 	"fmt"
@@ -11,10 +11,10 @@ import (
 // model for data region
 type Region struct {
 	// bson property is to define name on field on collection db
-	ID       bson.ObjectId `bson:"_id,omitempty"`
-	name     string        `bson:"name"`
-	number   string        `bson:"number"`
-	event_id string        `bson:"event_id"`
+	ID      bson.ObjectId `bson:"_id,omitempty"`
+	Name    string        `bson:"name,omitempty"`
+	Number  string        `bson:"number"`
+	EventID string        `bson:"event_id"`
 }
 
 // method to create session to connect on database
@@ -29,21 +29,14 @@ func connect() (*mgo.Session, error) {
 	return session, nil
 }
 
-func main() {
-	find()
-}
-
 // find method
-func find() {
+func Find() {
 	// create session
 	var session, err = connect()
 	if err != nil {
 		fmt.Println("Error!", err.Error())
 		return
 	}
-
-	fmt.Println("1 session created")
-
 	// close session
 	defer session.Close()
 
@@ -57,6 +50,8 @@ func find() {
 		return
 	}
 
-	fmt.Println("Name :", region.name)
-	fmt.Println(region.event_id)
+	fmt.Println("Name : ", region.Name)
+	fmt.Println("Number : ", region.Number)
+	fmt.Println("Event Id : ", region.EventID)
+	fmt.Println(region.ID)
 }
