@@ -83,9 +83,9 @@ func search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// parsing template with 2 return instance template, error (if exist)
-	var t, err = template.ParseFiles("index.html")
+	var t, err = template.ParseFiles("view/index.html")
 	if err != nil {
-		// shoing error msg on console
+		// showing error msg on console
 		fmt.Println(err.Error())
 		return
 	}
@@ -106,9 +106,28 @@ func searchGet(w http.ResponseWriter, r *http.Request) {
 
 		// get email value on post request
 		email := r.FormValue("email")
-		data := FindByEmail(email)
-		if data != nil {
-			fmt.Fprintf(w, "Email is %s", email)
+		// set var and showing the result of find user
+		if email, phone, password := FindByEmail(email); email != "" || phone != "" || password != "" {
+
+			// set data for template result
+			var data = map[string]string{
+				"title":    "Search Result",
+				"email":    email,
+				"password": password,
+				"phone":    phone,
+				// "message": "Welcome to go web app",
+			}
+
+			// parsing template and send data to show the result
+			var t, err = template.ParseFiles("view/result.html")
+			if err != nil {
+				// showing error msg on console
+				fmt.Println(err.Error())
+				return
+			}
+
+			// make result of parsing template show on web browser
+			t.Execute(w, data)
 		}
 
 		// fmt.Fprintf(w, "Email is %s", email)
@@ -118,12 +137,12 @@ func searchGet(w http.ResponseWriter, r *http.Request) {
 }
 
 // find method by email
-func FindByEmail(email string) map[string]string {
+func FindByEmail(email string) (string, string, string) {
 	// create session
 	session, err := connect()
 	if err != nil {
 		fmt.Println("Error!", err.Error())
-		return
+		return "", "", ""
 	}
 	// close session
 	defer session.Close()
@@ -135,12 +154,8 @@ func FindByEmail(email string) map[string]string {
 	err = collection.Find(selector).One(&user)
 	if err != nil {
 		fmt.Println("Error!", err.Error())
-		return
+		return "", "", ""
 	}
 
-	return map[string]string{
-		"email":    user.Email,
-		"number":   user.Phone,
-		"password": user.Password,
-	}
+	return user.Email, user.Phone, user.Password
 }

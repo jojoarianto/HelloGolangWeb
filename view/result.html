@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>{{.title}} | Golang Learn Net/Http</title>
+	<style type="text/css">
+		.container {
+			width: 800px;
+			/*background-color: #eee;*/
+			margin: 0 auto;
+			padding: 20px;
+			text-align: center;
+		}
+		.input-email {
+			font-size: 25px;
+			padding: 10px;
+			width: 400px;
+		}
+		.btn {
+			font-size: 20px;
+			margin-top: 20px;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="container" style="margin-top: 200px;">
+		<h2>Result of "{{.email}}"</h2><br>
+		<p style="text-align: left;">
+			<ul>
+				<li>Email: {{.email}}</li>
+				<li>Password: {{.password}}</li>
+				<li>Phone: {{.phone}}</li>
+			</ul>
+		</p>
+		<br>
+		<a href="search">kembali</a>
+	</div>
+</body>
+</html>
